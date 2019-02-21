@@ -27,8 +27,7 @@ namespace Application.Web
         {
             services.AddMvc();
 
-            //TODO: Create proper connection string and move it to settings
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=X;Trusted_Connection=True;ConnectRetryCount=0";
+            var connection = Configuration["SqlConnection:connectionString"];
             services.AddDbContext<ProductDbContext>
                 (options => options.UseSqlServer(connection));
         }

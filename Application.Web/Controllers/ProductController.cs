@@ -11,6 +11,8 @@ namespace Application.Web.Controllers
     [Route("api/[controller]")]
     public class ProductController : Controller
     {
+        //TODO: Implement controller. Add UoW usage.
+
         // GET: api/<controller>
         [HttpGet]
         public IEnumerable<string> Get()
