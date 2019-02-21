@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.DAL.Context;
+using Application.Data.UnitOfWork;
+using Application.Data.UnitOfWork.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,11 +27,11 @@ namespace Application.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-
             var connection = Configuration.GetConnectionString("MSSqlConnection");
-            services.AddDbContext<ProductDbContext>
-                (options => options.UseSqlServer(connection));
+
+            services.AddMvc();
+            services.AddDbContext<ProductDbContext>(options => options.UseSqlServer(connection));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
