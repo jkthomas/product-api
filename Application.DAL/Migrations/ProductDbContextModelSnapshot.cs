@@ -8,13 +8,12 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace Application.DAL.Migrations
+namespace Application.Data.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20190221154620_InitialProductDatabaseCreation")]
-    partial class InitialProductDatabaseCreation
+    partial class ProductDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,10 +22,11 @@ namespace Application.DAL.Migrations
 
             modelBuilder.Entity("Application.DAL.Entities.Product.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<decimal>("Price");
