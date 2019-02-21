@@ -7,7 +7,7 @@ namespace Application.DAL.Entities.Product
 {
     public class Product
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [MaxLength(100)]
         public string Name { get; set; }

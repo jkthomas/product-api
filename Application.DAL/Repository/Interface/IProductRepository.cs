@@ -8,7 +8,7 @@ namespace Application.Data.Repository.Interface
     public interface IProductRepository
     {
         IEnumerable<Product> GetAll();
-        Product Get(int id);
+        Product Get(Guid id);
 
         void Create(Product product);
         void Update(Product product);

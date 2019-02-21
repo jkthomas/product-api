@@ -27,7 +27,7 @@ namespace Application.Web
         {
             services.AddMvc();
 
-            var connection = Configuration["SqlConnection:connectionString"];
+            var connection = Configuration.GetConnectionString("MSSqlConnection");
             services.AddDbContext<ProductDbContext>
                 (options => options.UseSqlServer(connection));
         }

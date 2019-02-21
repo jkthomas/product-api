@@ -2,47 +2,65 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.DAL.Entities.Product;
+using Application.Data.UnitOfWork.Interface;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Application.Web.Controllers
 {
     [Route("api/[controller]")]
     public class ProductController : Controller
     {
-        //TODO: Implement controller. Add UoW usage.
+        private IUnitOfWork _unitOfWork;
+
+        public ProductController(IUnitOfWork unitOfWork)
+        {
+            this._unitOfWork = unitOfWork;
+        }
 
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            IEnumerable<Product> products = null;
+            products = _unitOfWork.ProductRepository.GetAll();
+
+            return Json(products);
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(Guid id)
         {
-            return "value";
+            Product product = null;
+            product = _unitOfWork.ProductRepository.Get(id);
+            return Json(product);
         }
 
+        //TODO: Add model validation.
+        //TODO: Change to product input models as arguments.
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post([FromBody]string value)
         {
+            return Json("");
         }
 
+        //TODO: Add model validation.
+        //TODO: Add operation validation.
+        //TODO: Change to product input models as arguments.
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(Guid id, [FromBody]string value)
         {
         }
 
+        //TODO: Add operation validation.
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
+
         }
     }
 }

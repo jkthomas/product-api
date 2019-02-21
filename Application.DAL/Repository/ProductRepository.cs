@@ -22,7 +22,7 @@ namespace Application.Data.Repository
             return this._productDbContext.Products;
         }
 
-        public Product Get(int id)
+        public Product Get(Guid id)
         {
             return this._productDbContext.Products.Where(p => p.Id == id).FirstOrDefault();
         }
