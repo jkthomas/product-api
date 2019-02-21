@@ -7,7 +7,7 @@ namespace Application.Web.Models.Product.Update
 {
     public class ProductUpdateInputModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 

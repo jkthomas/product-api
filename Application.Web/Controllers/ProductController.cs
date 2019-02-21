@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.DAL.Entities.Product;
 using Application.Data.UnitOfWork.Interface;
+using Application.Web.Models.Product.Create;
+using Application.Web.Models.Product.Update;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Web.Controllers
@@ -38,21 +40,37 @@ namespace Application.Web.Controllers
         }
 
         //TODO: Add model validation.
-        //TODO: Change to product input models as arguments.
+        //TODO: Add mapper
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Post([FromBody]string value)
+        public IActionResult Post([FromBody]ProductCreateInputModel productCreateInput)
         {
-            return Json("");
+            Product product = new Product()
+            {
+                Name = productCreateInput.Name,
+                Price = productCreateInput.Price
+            };
+            _unitOfWork.ProductRepository.Create(product);
+            _unitOfWork.ProductRepository.Save();
+
+            return Json(product.Id);
         }
 
         //TODO: Add model validation.
         //TODO: Add operation validation.
-        //TODO: Change to product input models as arguments.
+        //TODO: Add mapper
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody]string value)
+        public void Put([FromBody]ProductUpdateInputModel productUpdateInput)
         {
+            Product product = new Product()
+            {
+                Id = productUpdateInput.Id,
+                Name = productUpdateInput.Name,
+                Price = productUpdateInput.Price
+            };
+            _unitOfWork.ProductRepository.Update(product);
+            _unitOfWork.ProductRepository.Save();
         }
 
         //TODO: Add operation validation.
@@ -60,7 +78,9 @@ namespace Application.Web.Controllers
         [HttpDelete("{id}")]
         public void Delete(Guid id)
         {
-
+            Product product = _unitOfWork.ProductRepository.Get(id);
+            _unitOfWork.ProductRepository.Delete(product);
+            _unitOfWork.ProductRepository.Save();
         }
     }
 }
