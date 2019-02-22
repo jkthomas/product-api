@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application.DAL.Entities.Product;
+using System.Data.SqlClient;
 using Application.Data.UnitOfWork.Interface;
-using Application.Web.Models.Product.Create;
-using Application.Web.Models.Product.Update;
+using Application.Entities.Product.Create;
+using Application.Entities.Product.DAL;
+using Application.Entities.Product.Update;
+using Application.Utilities.Exception.Input;
+using Application.Utilities.Map.Product;
+using Application.Utilities.Validation.Product.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Web.Controllers
 {
@@ -14,10 +17,12 @@ namespace Application.Web.Controllers
     public class ProductController : Controller
     {
         private IUnitOfWork _unitOfWork;
+        private IProductValidator _productValidator;
 
-        public ProductController(IUnitOfWork unitOfWork)
+        public ProductController(IUnitOfWork unitOfWork, IProductValidator productValidator)
         {
             this._unitOfWork = unitOfWork;
+            this._productValidator = productValidator;
         }
 
         // GET: api/<controller>
@@ -25,9 +30,16 @@ namespace Application.Web.Controllers
         public IActionResult Get()
         {
             IEnumerable<Product> products = null;
-            products = _unitOfWork.ProductRepository.GetAll();
+            try
+            {
+                products = _unitOfWork.ProductRepository.GetAll();
 
-            return Json(products);
+                return Json(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
         }
 
         // GET api/<controller>/5
@@ -35,52 +47,100 @@ namespace Application.Web.Controllers
         public IActionResult Get(Guid id)
         {
             Product product = null;
-            product = _unitOfWork.ProductRepository.Get(id);
-            return Json(product);
+            try
+            {
+                product = _unitOfWork.ProductRepository.Get(id);
+
+                return Json(product);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return StatusCode(500);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
         }
 
-        //TODO: Add model validation.
-        //TODO: Add mapper
         // POST api/<controller>
         [HttpPost]
         public IActionResult Post([FromBody]ProductCreateInputModel productCreateInput)
         {
-            Product product = new Product()
+            try
             {
-                Name = productCreateInput.Name,
-                Price = productCreateInput.Price
-            };
-            _unitOfWork.ProductRepository.Create(product);
-            _unitOfWork.ProductRepository.Save();
+                this._productValidator.ValidateProductCreateInput(productCreateInput);
+                Product product = ProductMapper.Mapper.Map<Product>(productCreateInput);
+                _unitOfWork.ProductRepository.Create(product);
+                _unitOfWork.ProductRepository.Save();
 
-            return Json(product.Id);
+                return Json(product.Id);
+            }
+            catch (InputNullException ex)
+            {
+                return StatusCode(400);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(400);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
         }
 
-        //TODO: Add model validation.
-        //TODO: Add operation validation.
-        //TODO: Add mapper
         // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put([FromBody]ProductUpdateInputModel productUpdateInput)
+        [HttpPut]
+        public IActionResult Put([FromBody]ProductUpdateInputModel productUpdateInput)
         {
-            Product product = new Product()
+            try
             {
-                Id = productUpdateInput.Id,
-                Name = productUpdateInput.Name,
-                Price = productUpdateInput.Price
-            };
-            _unitOfWork.ProductRepository.Update(product);
-            _unitOfWork.ProductRepository.Save();
+                this._productValidator.ValidateProductUpdateInput(productUpdateInput);
+                Product product = ProductMapper.Mapper.Map<Product>(productUpdateInput);
+                _unitOfWork.ProductRepository.Update(product);
+                _unitOfWork.ProductRepository.Save();
+            }
+            catch (InputNullException ex)
+            {
+                return StatusCode(400);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(400);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+
+            return StatusCode(204);
         }
 
-        //TODO: Add operation validation.
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        public IActionResult Delete(Guid id)
         {
-            Product product = _unitOfWork.ProductRepository.Get(id);
-            _unitOfWork.ProductRepository.Delete(product);
-            _unitOfWork.ProductRepository.Save();
+            try
+            {
+                Product product = _unitOfWork.ProductRepository.Get(id);
+                _unitOfWork.ProductRepository.Delete(product);
+                _unitOfWork.ProductRepository.Save();
+            }
+            catch (SqlException ex)
+            {
+                return StatusCode(400);
+            }
+            catch(ArgumentNullException ex)
+            {
+                return StatusCode(500);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+
+            return StatusCode(204);
         }
     }
 }

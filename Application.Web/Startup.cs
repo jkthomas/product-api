@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Application.DAL.Context;
 using Application.Data.UnitOfWork;
 using Application.Data.UnitOfWork.Interface;
+using Application.Utilities.Validation.Product;
+using Application.Utilities.Validation.Product.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +34,7 @@ namespace Application.Web
             services.AddMvc();
             services.AddDbContext<ProductDbContext>(options => options.UseSqlServer(connection));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IProductValidator, ProductValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

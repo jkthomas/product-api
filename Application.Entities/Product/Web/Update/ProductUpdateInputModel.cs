@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace Application.Web.Models.Product.Create
+namespace Application.Entities.Product.Update
 {
-    public class ProductCreateInputModel
+    public class ProductUpdateInputModel
     {
+        public Guid Id { get; set; }
+
         public string Name { get; set; }
 
         public decimal Price { get; set; }

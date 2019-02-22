@@ -1,7 +1,6 @@
-﻿using Application.DAL.Entities.Product;
+﻿using Application.Entities.Product.DAL;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Application.Data.Repository.Interface
 {

@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application.DAL\Application.Data.csproj" />
+    <ProjectReference Include="..\Application.Entities\Application.Entities.csproj" />
+    <ProjectReference Include="..\Application.Utilities\Application.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

@@ -21,4 +21,8 @@
     <Folder Include="DAL\Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Application.Entities\Application.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

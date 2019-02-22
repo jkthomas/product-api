@@ -1,10 +1,9 @@
 ﻿using Application.DAL.Context;
-using Application.DAL.Entities.Product;
 using Application.Data.Repository.Interface;
+using Application.Entities.Product.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Application.Data.Repository
 {

@@ -1,4 +1,4 @@
-﻿using Application.DAL.Entities.Product;
+﻿using Application.Entities.Product.DAL;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
